@@ -134,9 +134,38 @@ sudo supervisorctl status
 
 Honeypot
 ```
-
+gcloud compute instances create "honeypot" \
+    --machine-type "n1-standard-1" \
+    --subnet "default" \
+    --maintenance-policy "MIGRATE" \
+    --tags "honeypot" \
+    --image "ubuntu-minimal-1804-bionic-v20191024" \
+    --image-project "ubuntu-os-cloud" \
+    --boot-disk-size "10" \
+    --boot-disk-type "pd-standard" \
+    --boot-disk-device-name "honeypot"
 ```
 
+Setup SSH
+```
+gcloud compute config-ssh
+```
+
+Deploy Honeypot Sensors
+```
+curl ipinfo.io.ip <----if i forgot the public IP of the MHN admin
+```
+
+Dump Sensor Database
+```
+mongoexport --db mnemosyne --collection session > session.json
+```
+
+Clean Up
+```
+gcloud projects list
+gcloud projects delete PROJECT-ID
+```
 
 Any issues you encountered
 A summary of the data collected: number of attacks, number of malware samples, etc.

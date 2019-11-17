@@ -24,7 +24,7 @@ gcloud services list --available
 gcloud services list --available | findstr compute
 gcloud services enable compute
 ```
-
+![](Honeypot/Services_List.png)
 #### Find and SEt region and zone
 ```
 gcloud compute regions list
@@ -34,7 +34,7 @@ cloud config set compute/zone us-central1-f
 gcloud compute project-info add-metadata \
     --metadata google-compute-default-region=us-central1,google-compute-default-zone=us-central1-f
 ```
-
+![](Honeypot/Compute_Regions_Zones.png)
 ### Mileston 1: Create MHN Admin VM
 #### Configure Firewall
 ```
@@ -51,7 +51,9 @@ gcloud compute firewall-rules create honeymap ^
     --description="Allow HoneyMap Feature from Anywhere" ^
     --direction ingress ^
     --target-tags="mhn-admin"
-
+```
+![](Honeypot/Configure_Firewall.png)
+```
 gcloud compute firewall-rules create hpfeeds ^
     --allow tcp:10000 ^
     --description="Allow HPFeeds from Anywhere" ^
@@ -68,13 +70,15 @@ gcloud compute firewall-rules create wideopen ^
     --source-ranges=0.0.0.0/0 ^
     --target-tags="honeypot"
 ```
+![](Honeypot/Configure_Firewall_1.png)
 
 #### Verify Firewall in windows CMD
 ```
 gcloud compute firewall-rules list --format="table(name,network,direction,priority,sourceRanges.list():label=SRC_RANGES,allowed[].map().firewall_rule().list():label=ALLOW,targetTags.list():label=TARGET_TAGS,disabled)"
 ```
+![](Honeypot/Configure_Firewall_Windows_CMD.png)
 
-MHN Admin
+#### MHN Admin
 ```
 gcloud compute images list | findstr ubuntu-minimal
 
@@ -89,15 +93,15 @@ gcloud compute instances create "mhn-admin" ^
     --boot-disk-type "pd-standard" ^
     --boot-disk-device-name "mhn-admin"
 ```
-
-Setup SSH
+![](Honeypot/MHN_Admin.png)
+#### Setup SSH
 ```
 gcloud compute config-ssh
 ```
 
 ### Milestone 2: Install the MHN Admin Application
 
-Install
+#### Install
 ```
 sudo apt update && sudo apt install git python-magic -y
 
@@ -107,8 +111,10 @@ cd mhn/
 
 sudo ./install.sh
 ```
+![](Honeypot/Install_MHN.png)
+![](Honeypot/Install_MHN_1.png)
 
-Configure
+#### Configure
 ```
 ===========================================================
 MHN Configuration
@@ -127,16 +133,18 @@ Mail server password [""]:
 Mail default sender [""]: 
 Path for log file ["mhn.log"]:
 ```
+![](Honeypot/MHN_Configuration.png)
 
-Confirm successful installation
+#### Confirm successful installation
 ```
 sudo /etc/init.d/nginx status
 sudo /etc/init.d/supervisor status
 sudo supervisorctl status
 ```
+![](Honeypot/Successful_Installations.png)
 
 ### Milestone 3: Create a MHN Honeypot VM
-Honeypot
+#### Honeypot
 ```
 gcloud compute instances create "honeypot" \
     --machine-type "n1-standard-1" \
@@ -149,35 +157,36 @@ gcloud compute instances create "honeypot" \
     --boot-disk-type "pd-standard" \
     --boot-disk-device-name "honeypot"
 ```
+![](Honeypot/Create_Honeypot.png)
 
-Setup SSH
+#### Setup SSH
 ```
 gcloud compute config-ssh
 ```
 
 ### Milestone 4: Install the Honeypot Application
 
-Connect to the MHN Admin IP address in Chrome
+#### Connect to the MHN Admin IP address in Chrome
 `http://35.232.198.247/`
 
 ### Milestone 5: Attack!
 
 - In web browser, click Deplot and Select Script Ubuntu/Raspberry Pi-Dionaea
 - Copy the Deploy Command and enter into the command in the honeypot terminal and confirm successful deployment.
+![](Honeypot/Deploy_Honeypot.JPG)
 
-Deploy Honeypot Sensors
+#### Deploy Honeypot Sensors
 ```
 curl ipinfo.io.ip <----if i forgot the public IP of the MHN admin
 ```
 
 ### Exporting Data
-Dump Sensor Database
+#### Dump Sensor Database
 ```
 mongoexport --db mnemosyne --collection session > session.json
 ```
 
 ### Cleanup
-Clean Up
 ```
 gcloud projects list
 gcloud projects delete PROJECT-ID

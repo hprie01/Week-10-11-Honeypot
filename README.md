@@ -9,7 +9,7 @@ gcloud init
 gcloud projects list
 gcloud config set project honeypot-258220
 ```
-![] (Projects_List.png)
+![](Honeypot/Projects_List.png)
 
 #### Enable billing
 ```

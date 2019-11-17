@@ -3,21 +3,20 @@ Time Spent: **6** hours total
 
 ## Overview & Setup
 ### Milestone 0: To the Cloud
-1.  
-Initialize Google SDK
+#### Initialize Google SDK
 ```
 gcloud init
 gcloud projects list
 gcloud config set project honeypot-258220
 ```
 
-Enable billing
+#### Enable billing
 ```
 gcloud alpha billings accounts list
 gcloud alpha billing projects link honeypot-258220 --billing-account 01B787-37BD8D-D1CE2C
 ```
 
-Enable Compute API
+#### Enable Compute API
 ```
 gcloud services list
 gcloud services list --available
@@ -25,7 +24,7 @@ gcloud services list --available | findstr compute
 gcloud services enable compute
 ```
 
-Find and SEt region and zone
+#### Find and SEt region and zone
 ```
 gcloud compute regions list
 gcloud compute zones list
@@ -35,7 +34,8 @@ gcloud compute project-info add-metadata \
     --metadata google-compute-default-region=us-central1,google-compute-default-zone=us-central1-f
 ```
 
-Configure Firewall
+### Mileston 1: Create MHN Admin VM
+#### Configure Firewall
 ```
 gcloud compute firewall-rules list
 
@@ -68,7 +68,7 @@ gcloud compute firewall-rules create wideopen ^
     --target-tags="honeypot"
 ```
 
-Verify Firewall  in windows CMD
+#### Verify Firewall in windows CMD
 ```
 gcloud compute firewall-rules list --format="table(name,network,direction,priority,sourceRanges.list():label=SRC_RANGES,allowed[].map().firewall_rule().list():label=ALLOW,targetTags.list():label=TARGET_TAGS,disabled)"
 ```
@@ -94,6 +94,8 @@ Setup SSH
 gcloud compute config-ssh
 ```
 
+### Milestone 2: Install the MHN Admin Application
+
 Install
 ```
 sudo apt update && sudo apt install git python-magic -y
@@ -113,8 +115,8 @@ MHN Configuration
 Do you wish to run in Debug mode?: y/n n
 Superuser email: polarber@diamond.com
 Superuser password: deliverance
-Server base url ["          "]:
-Honeymap url ["                "]:
+Server base url ["http://35.232.198.247"]:
+Honeymap url ["http://35.232.198.247:3000"]:
 Mail server address ["localhost"]: 
 Mail server port [25]: 
 Use TLS for email?: y/n n
@@ -132,6 +134,7 @@ sudo /etc/init.d/supervisor status
 sudo supervisorctl status
 ```
 
+### Milestone 3: Create a MHN Honeypot VM
 Honeypot
 ```
 gcloud compute instances create "honeypot" \
@@ -151,16 +154,28 @@ Setup SSH
 gcloud compute config-ssh
 ```
 
+### Milestone 4: Install the Honeypot Application
+
+Connect to the MHN Admin IP address in Chrome
+`http://35.232.198.247/`
+
+### Milestone 5: Attack!
+
+- In web browser, click Deplot and Select Script Ubuntu/Raspberry Pi-Dionaea
+- Copy the Deploy Command and enter into the command in the honeypot terminal and confirm successful deployment.
+
 Deploy Honeypot Sensors
 ```
 curl ipinfo.io.ip <----if i forgot the public IP of the MHN admin
 ```
 
+### Exporting Data
 Dump Sensor Database
 ```
 mongoexport --db mnemosyne --collection session > session.json
 ```
 
+### Cleanup
 Clean Up
 ```
 gcloud projects list

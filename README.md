@@ -169,17 +169,14 @@ gcloud compute config-ssh
 #### Connect to the MHN Admin IP address in Chrome
 `http://35.232.198.247/`
 
+## Deploy Honeypot
 ### Milestone 5: Attack!
-
-- In web browser, click Deplot and Select Script Ubuntu/Raspberry Pi-Dionaea
-- Copy the Deploy Command and enter into the command in the honeypot terminal and confirm successful deployment.
-![](Honeypot/Deploy_Honeypot.JPG)
-
 #### Deploy Honeypot Sensors
-```
-curl ipinfo.io.ip <----if i forgot the public IP of the MHN admin
-```
-
+- In web browser, click Deploy and Select Script Ubuntu/Raspberry Pi-Dionaea
+- Copy the Deploy Command and enter into the command in the honeypot terminal and confirm successful deployment.
+![](Honeypot/Deploy_Script.JPG)
+![](Honeypot/Deploy_Honeypot.JPG)
+![](Honeypot_Attack.gif)
 ### Exporting Data
 #### Dump Sensor Database
 ```
@@ -191,12 +188,10 @@ mongoexport --db mnemosyne --collection session > session.json
 gcloud projects list
 gcloud projects delete PROJECT-ID
 ```
-
-Any issues you encountered
-A summary of the data collected: number of attacks, number of malware samples, etc.
-Any unresolved questions raised by the data collected
-
-Additionally, include a json export of the data you collected in the repo, instructions for which can be found in the next section.
-
-## Required: Demonstration
-(Which Honeypot's you deployed
+## Summary
+Honeypot deployed: Ubuntu/Raspberry Pi-Dionaea
+Issues Encountered:
+    - Some issues encountered included how to use the cloud service. After figuring out how to use the service everything ran smoothly.
+Summary of Data:
+    - According to the data, it states that there has only been one attack made, but there are attacks occuring in the map.
+![](Attacks.JPG)
